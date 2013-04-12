@@ -1,21 +1,26 @@
 <?php
 namespace system;
 
-abstract class Singleton
-{
-	public function __construct()
+class Singleton
+{	
+	public static $application = null;
+	
+	public function __construct($route)
 	{
-		
+		$application = new \stdClass();
+		static::$application->route = $route;		
 	}
 	public function __clone ()
 	{
 		
 	}
+	
 	public static function getInstance()
-	{
-		if (!isset(self::$instance)) {
-	    	self::$instance = new self;        
-		}        
-		return self::$instance;
-	}
+    {
+        if (!isset(static::$application)) {
+            static::$application = new static;
+        }
+        return static::$application;
+    }
+	
 }
