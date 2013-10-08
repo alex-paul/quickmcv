@@ -8,18 +8,33 @@ class FMVC_Controller
 	public $view;
 	public $layout;
 	public $content;
+	private $_serviceLocator;
+	
 	public function init()
 	{
 		
 	}
 	
-	public function __construct( $name, $params )
+	public function loadExtension($sExtensionName) {
+		if(!isset($sExtensionName) && !is_string($sExtensionName)) {
+			throw new FMVC_Exception('Invalid extension name specified.');
+		}
+		
+		$sExtensionFileName = '../system' . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . $sExtensionName . DIRECTORY_SEPARATOR . ucfirst($sExtensionName) . '.extension.php';		
+		
+		if(!file_exists($sExtensionFileName)) {
+			throw new FMVC_Exception('The specified extension not found in the library.');
+		}
+		require_once $sExtensionFileName;
+	}
+	
+	public function __construct($name, $params)
 	{
 		
 		$this->name = $name;
-		$this->params = $params;
+		$this->params = $params;		
 		$this->init();
-		$this->layout = '../application/view/layout/default.phtml';
+		$this->layout = '../application' . DIRECTORY_SEPARATOR. 'view' . DIRECTORY_SEPARATOR. 'layout' . DIRECTORY_SEPARATOR . 'default.phtml';
 		
 		
 	}

@@ -7,8 +7,8 @@ class Singleton
 	
 	public function __construct($route)
 	{
-		$application = new \stdClass();
-		static::$application->route = $route;		
+		self::$application = new \stdClass();
+		self::$application->route = $route;		
 	}
 	public function __clone ()
 	{
@@ -20,7 +20,26 @@ class Singleton
         if (!isset(static::$application)) {
             static::$application = new static;
         }
-        return static::$application;
+        return self::$application;
     }
+	
+	public static function setServiceLocator(ServiceLocator $oServiceLocator)
+	{
+		if(!$oServiceLocator instanceof ServiceLocator) {
+			throw new \system\FMVC_Exception('Ivalid parameter provided for setting the service locator.');
+		} else {
+			$application = self::getInstance();
+			$application->_serviceLocator = $oServiceLocator;
+		}
+	}
+	
+	public static function getServiceLocator()
+	{
+		if (isset(self::$application->_serviceLocator)) {
+			return self::$application->_serviceLocator;	
+		} else {
+			throw new \system\FMVC_Exception('The service locator hasn\'t been set');
+		}
+	}
 	
 }

@@ -6,8 +6,7 @@ require '../system/Singleton.class.php';
 
 
 class FMVC extends Singleton
-{
-	
+{	
 	
 	public function __construct($route_array = null)
 	{
@@ -40,9 +39,26 @@ class FMVC extends Singleton
 	{
 		return self::$application;
 	}
+	
+	public function initServiceLocator() 
+	{
+		$oServiceLocator = new ServiceLocator();
+		$this->setServiceLocator($oServiceLocator);
+	}
+	
+	public function registerDbService()
+	{
+		$oDb = new \mysqli('localhost', 'root', '', 'stuff');
+		$oServiceLocator = $this->getServiceLocator();
+		$oServiceLocator->registerService('db', $oDb);	
+	}
+	
+	
 	public function run()
 	{
 		
+		$this->initServiceLocator();
+		$this->registerDbService();
 				
 		$controllers = scandir('../application/controller/');
 		
@@ -74,8 +90,7 @@ class FMVC extends Singleton
 				$obj->$action_name();		
 			}
 		}
-		
-		
+				
 		
 	}
 }

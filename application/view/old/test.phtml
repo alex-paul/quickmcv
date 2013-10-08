@@ -1,3 +1,16 @@
+sss<?php 
+$oForm = new Form('post', '', array ('ss'=>'ss')); 
+$oForm->openForm();
+$oForm->addInput(
+	'text', 
+	'name', 
+	'', 
+	array ( 'class' => 'customText', 'style' => '1px solid red'),
+    TRUE
+);
+$oForm->closeForm();
+?>
+ss
 <p>Static paragrapth</p>
 <p>var1 = <?php echo $var1; ?></p>
 <p>var2 = <?php echo $var2; ?></p>
