@@ -88,7 +88,7 @@ class FMVC_Controller
 		ob_start();                      // start capturing output
 		require_once($view_file_path);
 		$this->content = ob_get_contents();    // get the contents from the buffer
-		$used_vars = get_defined_vars();
+		$used_vars = get_defined_vars();		
 		ob_end_clean();   
 		
 		

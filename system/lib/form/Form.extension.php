@@ -5,9 +5,11 @@
  * @author Alexandru Paul <rainelf@gmail.com>
  * @version 1.0
  */
+ 
+require_once('Form.validation.php');
 
 class Form 
-{
+{	
 	private $_oForm;
 	private $_validMethods = array ('post', 'get');
 	private $_validInputTypes = array ('text', 'hidden', 'radio', 'checkbox', 'submit', 'image');
@@ -63,13 +65,14 @@ class Form
 	 * @param $sValue string
 	 * @param $aExtra array
 	 * @param $bWriteInput bool
+	 * @param $aValidationRules
 	 * 
 	 * Method that creates an element for the current form. The input type must be a valid one, contained in
 	 * $this->$_validInputTypes. 
 	 * The $aExtra parameters provide an array of attributes that in the input might have.
 	 * If $bWriteInput is set to true then the method also writes in the view file, the code that creates the input.
 	 */
-	public function addInput ($sType, $sName, $sValue = '', $aExtra = array(), $bWriteInput = FALSE)
+	public function addInput ($sType, $sName, $sValue = '', $aExtra = array(), $bWriteInput = FALSE, $aValidationRules)
 	{		
 		if (!isset($sType) || !is_string($sType) || !in_array($sType, $this->_validInputTypes)) {
 			throw new \system\FMVC_Exception("Invalid type specified for the input.");
@@ -90,6 +93,10 @@ class Form
 		
 		if (!isset($this->_oForm->elements)) {
 			$this->_oForm->elements = array();
+		}
+		
+		if (isset($aValidationRules) && is_array($aValidationRules)) {
+			$oInput->validationRules = $aValidationRules;
 		}
 		
 		$oInput->value = $sValue;
@@ -120,11 +127,12 @@ class Form
 	 * @param $mValue mixed
 	 * @param $aExtra array
 	 * @param $bWriteInput bool
+	 * @param $aValidationRules
 	 * 
 	 * Method that adds a select box to the form, either drop down or multiple select.
 	 * If $bWriteInput is set to true, then the method also writes (in the view file) the content of the input. 
 	 */
-	public function addSelect($sName, $aOptions = array(), $mValue = '', $aExtra = array(), $bWriteInput = FALSE)
+	public function addSelect($sName, $aOptions = array(), $mValue = '', $aExtra = array(), $bWriteInput = FALSE, $aValidationRules)
 	{
 				
 		if (!isset($sName) || !is_string($sName)) {
@@ -147,6 +155,10 @@ class Form
 		
 		if (isset($aExtra) && is_array($aExtra)){
 			$oInput->extra = $aExtra;
+		}
+				
+		if (isset($aValidationRules) && is_array($aValidationRules)) {
+			$oInput->validationRules = $aValidationRules;
 		}
 		
 		if (!isset($this->_oForm->elements)) {
@@ -192,6 +204,11 @@ class Form
 	 */
 	public function printCurrentHtml() {
 		echo $this->sHtml;	
+	}
+	
+	public function setValidation() 
+	{
+		$oFormValidation = new FormValidation($this);
 	}
 	
 }
