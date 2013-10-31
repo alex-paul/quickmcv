@@ -72,7 +72,7 @@ class Form
 	 * The $aExtra parameters provide an array of attributes that in the input might have.
 	 * If $bWriteInput is set to true then the method also writes in the view file, the code that creates the input.
 	 */
-	public function addInput ($sType, $sName, $sValue = '', $aExtra = array(), $bWriteInput = FALSE, $aValidationRules)
+	public function addInput ($sType, $sName, $sValue = '', $aExtra = array(), $bWriteInput = FALSE, $aValidationRules = array())
 	{		
 		if (!isset($sType) || !is_string($sType) || !in_array($sType, $this->_validInputTypes)) {
 			throw new \system\FMVC_Exception("Invalid type specified for the input.");
@@ -132,7 +132,7 @@ class Form
 	 * Method that adds a select box to the form, either drop down or multiple select.
 	 * If $bWriteInput is set to true, then the method also writes (in the view file) the content of the input. 
 	 */
-	public function addSelect($sName, $aOptions = array(), $mValue = '', $aExtra = array(), $bWriteInput = FALSE, $aValidationRules)
+	public function addSelect($sName, $aOptions = array(), $mValue = '', $aExtra = array(), $bWriteInput = FALSE, $aValidationRules = array())
 	{
 				
 		if (!isset($sName) || !is_string($sName)) {

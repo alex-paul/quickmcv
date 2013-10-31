@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * @package FMVC
+ * @author Alexandru Paul <rainelf@gmail.com>
+ * @version 1.0
+ */
+ 
+
 class FormValidation
 {
 	private $_oForm;
@@ -30,17 +37,23 @@ class FormValidation
 				{
 					if(isset($aRule['type']))
 					{
-						$sValidationMethodName = 'validate'. ucfirst($aRule['type']);
-						if(!method_exists($this, $sValidationMethodName)) {
+						$sValidationMethodName = 'validate' . ucfirst($aRule['type']);
+						$sDefaultErrorMessage = 'getDefaultErrorMessage'. ucfirst($aRule['type']);
+						if (!method_exists($this, $sValidationMethodName)) {
+							throw new \system\FMVC_Exception("The specified validation rule does not exist!");
+						}
+						if (!method_exists($this, $sDefaultErrorMessage)) {
 							throw new \system\FMVC_Exception("The specified validation rule does not exist!");
 						}
 						$bValid = $this->$sValidationMethodName($oElement->value);
 						if($bValid === FALSE) {
-							$sErrorMessage = 'The field "'.$oElement->name.'" is required.';
+							$sErrorMessage = '';
 							if (isset($aRule['errorMessage'])) {
 								$sErrorMessage = $aRule['errorMessage'];
+							} else {
+								$sErrorMessage = $this->$sValidationMethodName($oElement->name);
 							}
-							if(!isset($oElement->validationErrorMessages)) {
+							if (!isset($oElement->validationErrorMessages)) {
 								$oElement->validationErrorMessages = array();
 							}
 							$oElement->validationErrorMessages [] = $sErrorMessage;
@@ -92,6 +105,44 @@ class FormValidation
 	public function validateRegex($sValue, $sPattern)
 	{
 		return (filter_var($sValue, FILTER_VALIDATE_REGEXP, $sPattern)) ? TRUE : FALSE;
+	}
+	
+	/**
+	 * @var $sName string
+	 */
+	public function getDefaultErrorMessageRequired($sName)
+	{
+		return 'The field "' . $sName . '" is required.';
+	}
+	
+	public function getDefaultErrorMessageeEmail($sName)
+	{
+		return 'The field "' . $sName . '" must be a valid email.';
+	}
+	
+	public function getDefaultErrorMessageUrl($sName)
+	{
+		return 'The field "' . $sName . '" must be a valid url.';
+	}
+	
+	public function getDefaultErrorMessageBoolean($sName)
+	{
+		return 'The field "' . $sName . '" must be boolean.';
+	}
+	
+	public function getDefaultErrorMessageFloat($sName)
+	{
+		return 'The field "' . $sName . '" must be float.';
+	}
+	
+	public function getDefaultErrorMessageInt($sName)
+	{
+		return 'The field "' . $sName . '" must be an integer.';
+	}
+	
+	public function getDefaultErrorMessageRegex($sName)
+	{
+		return 'The field "' . $sName . '" does not match the specified regex.';
 	}
 	
 }

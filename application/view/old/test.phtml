@@ -6,7 +6,11 @@ $oForm->addInput(
 	'name', 
 	'', 
 	array ( 'class' => 'customText', 'style' => '1px solid red'),
-    TRUE
+    TRUE,
+    array (
+    	array ('type' => 'required', 'errorMessage' => 'Campul acesta nu trebuie sa fie gol'),
+    	array ('type' => 'email')
+	)
 );
 $oForm->closeForm();
 ?>
